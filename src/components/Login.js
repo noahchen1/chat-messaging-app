@@ -16,6 +16,7 @@ export default function Login() {
                     type="text"
                     autoComplete='off'
                     value={username}
+                    onChange={e => setUsername(e.target.value)}
                     ref={usernameRef}
                     id="username"
                     required
@@ -24,7 +25,9 @@ export default function Login() {
                 <label htmlFor='password'>Password:</label>
                 <input 
                     type="password"
+                    autoComplete='off'
                     value={pwd}
+                    onChange={e => setPwd(e.target.value)}
                     id="password"
                     required
                 />
