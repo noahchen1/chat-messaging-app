@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
+const allowedOrigins = require('./config/allowedOrigins')
 
 const PORT = process.env.PORT || 4000;
 const URI = process.env.ATLAS_URI;
@@ -17,6 +18,7 @@ const connectDB = () => {
 }
 
 app.use(express.json());
+app.use(cors(allowedOrigins));
 connectDB();
 
 app.use('/auth', require('./routes/auth'));

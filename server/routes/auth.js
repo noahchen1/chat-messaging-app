@@ -8,9 +8,10 @@ const handleLogin = async(req, res) => {
     const username = req.body.username;
     const pwd = req.body.password;
     const foundUser = await User.findOne({ username: username }).exec();
+    if (!foundUser) return res.sendStatus(400); //Unauthorized
+
     const match = await bcrypt.compare(pwd, foundUser.password);
 
-    if (!foundUser) return res.sendStatus(400); //Unauthorized
     if (match) {
         const accessToken = jwt.sign(
             {
