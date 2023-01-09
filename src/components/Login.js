@@ -1,11 +1,14 @@
 import axios from "axios";
 import React from "react";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
 export default function Login() {
     const URL = 'http://localhost:4000/auth';
     const usernameRef = useRef();
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState("");
     const [pwd, setPwd] = useState("");
     const [errMsg, setErrMsg] = useState('');
@@ -26,7 +29,7 @@ export default function Login() {
                 setAuth({ username, pwd, accessToken });
                 setUsername('');
                 setPwd('');
-
+                navigate('/');
             }).catch(err => {
                 if (!err?.response) {
                     setErrMsg('No Server Response');
@@ -111,7 +114,7 @@ export default function Login() {
                                     <p className="text-sm font-semibold mt-2 pt-1 mb-0">
                                         Don't have an account?
                                         <a
-                                            href="#!"
+                                            href="/register"
                                             className="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
                                         >
                                             Register
