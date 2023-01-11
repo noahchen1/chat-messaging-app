@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
@@ -12,7 +12,7 @@ export default function Login() {
     const [username, setUsername] = useState("");
     const [pwd, setPwd] = useState("");
     const [errMsg, setErrMsg] = useState('');
-    const { auth, setAuth } = useAuth();
+    const { auth, setAuth, rememberUser, setRememberUser } = useAuth();
 
     const handleSumit = async (e) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ export default function Login() {
                 setAuth({ username, pwd, accessToken });
                 setUsername('');
                 setPwd('');
-                navigate('/');
+                navigate('/dashboard');
             }).catch(err => {
                 if (!err?.response) {
                     setErrMsg('No Server Response');
@@ -42,6 +42,10 @@ export default function Login() {
                 }
             })
     };
+
+    const toggleRememberMe = () => {
+        setRememberUser(prev => !prev);
+    }; 
 
     return (
         <div>
@@ -91,6 +95,8 @@ export default function Login() {
                                             type="checkbox"
                                             className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                                             id="remember-me-check-box"
+                                            checked={rememberUser}
+                                            onChange={toggleRememberMe}
                                         />
                                         <label
                                             className="form-check-label inline-block text-gray-800"
