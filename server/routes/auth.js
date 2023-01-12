@@ -7,6 +7,7 @@ const router = express.Router();
 const handleLogin = async(req, res) => {
     const username = req.body.username;
     const pwd = req.body.password;
+
     const foundUser = await User.findOne({ username: username }).exec();
     if (!foundUser) return res.sendStatus(400); //Unauthorized
 
@@ -26,7 +27,7 @@ const handleLogin = async(req, res) => {
         const refreshToken = jwt.sign(
             { "username": foundUser.username },
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: '1d' }
+            { expiresIn: '20s' }
         )
 
         foundUser.refreshToken = refreshToken;

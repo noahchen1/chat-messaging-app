@@ -25,8 +25,9 @@ export default function Login() {
         axios.post(URL, userToLogin)
             .then(res => {
                 const accessToken = res?.data?.accessToken;
+                const refreshToken = res?.data.refreshToken;
 
-                setAuth({ username, pwd, accessToken });
+                setAuth({ username, pwd, accessToken, refreshToken });
                 setUsername('');
                 setPwd('');
                 navigate('/dashboard');

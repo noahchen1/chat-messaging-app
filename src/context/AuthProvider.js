@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import axios from 'axios';
 
@@ -9,14 +9,17 @@ export function useAuth() {
 }
 
 export function useRefreshToken() {
+    const REFRESH_URL = 'http://localhost:4000/refresh';
     const { auth, setAuth } = useAuth();
-    const accessToken = { refreshToken: auth.refreshToken };
+    const refreshToken = { refreshToken: auth.refreshToken};
 
-    axios.get('/refresh', accessToken).then(res => {
-        setAuth(prev => {
-            return {...prev, accessToken: res.data.accessToken}
+    useEffect(() => {
+        axios.post(REFRESH_URL, refreshToken).then(res => {
+            const newAuth = {...auth, accessToken: res.data.accessToken};
+            setAuth(newAuth)
         });
-    });
+    }, [auth])
+
 }
 
 export function AuthProvider({ children }) {

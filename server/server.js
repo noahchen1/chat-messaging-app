@@ -23,7 +23,7 @@ connectDB();
 
 app.use('/auth', require('./routes/auth'));
 app.use('/register', require('./routes/register'));
-app.use('/refreh', require('./routes/refresh'));
+app.use('/refresh', require('./routes/refresh'));
 
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
