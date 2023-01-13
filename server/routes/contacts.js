@@ -1,14 +1,23 @@
 const router = require('express').Router();
 const User = require('../model/User');
 
-const getContacts = async(req, res) => {
-    const username = req.body.username;
-    console.log(username)
-    const foundUser = await User.findOne({ username: username }).exec();
+const getContacts = async (req, res) => {
+    const refreshToken = req.body.refreshToken
+    if (!refreshToken) return res.sendStatus(401);
 
-    if (!foundUser) return res.sendStatus(400);
+    const foundUser = await User.findOne({ refreshToken: refreshToken }).exec();
+    if (!foundUser) return res.sendStatus(403) //Forbiden
 
-    res.json(foundUser.contacts);
+    User.find()
+        .then(users => {
+            const usernameArr = [];
+
+            users.forEach(user => usernameArr.push(user.username));
+            res.json(usernameArr)
+        })
+        .catch(err => res.status(400).json('Error' + err));
+
+    // res.json(foundUser.contacts);
 }
 
 router.post('/', getContacts);

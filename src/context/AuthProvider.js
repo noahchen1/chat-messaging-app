@@ -19,7 +19,6 @@ export function useRefreshToken() {
             setAuth(newAuth)
         });
     }, [auth])
-
 }
 
 export function AuthProvider({ children }) {
