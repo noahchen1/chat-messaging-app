@@ -24,6 +24,10 @@ connectDB();
 app.use('/auth', require('./routes/auth'));
 app.use('/register', require('./routes/register'));
 app.use('/refresh', require('./routes/refresh'));
+app.use('/new-contact', require('./routes/updateContacts'));
+app.use('/new-conversation', require('./routes/updateConversations'));
+app.use('/contacts', require('./routes/contacts'));
+app.use('/conversations', require('./routes/conversations'));
 
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 

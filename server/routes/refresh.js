@@ -5,7 +5,6 @@ const router = express.Router();
 
 const handleRefreshToken = async(req, res) => {
     const refreshToken = req.body.refreshToken;
-    console.log(req.headers)
     if (!refreshToken) return res.sendStatus(401);
 
     const foundUser = await User.findOne({ refreshToken: refreshToken }).exec();

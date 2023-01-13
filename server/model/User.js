@@ -9,6 +9,8 @@ const userSchema = new schema({
         type: String,
         required: true
     },
+    contacts: Array,
+    conversations: Array,
     refreshToken: String
 });
 
