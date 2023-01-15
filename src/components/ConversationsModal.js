@@ -1,17 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useContacts } from '../context/ContactsProvider';
-
-const CONTACTS_URL = 'http://localhost:4000/contacts';
+import { useConversations } from '../context/ConversationsProvider';
 
 export default function ConversationsModal({ closeModal }) {
-    const { contacts} = useContacts();
+    const { contacts } = useContacts();
+    const { conversations, createConversation } = useConversations();
+    const [selectedContacts, setSelectedContacts] = useState([]);
 
-    const handleSelectedContact = (e) => {
+    const handleSelectedContact = (e, contact) => {
         const btn = e.target;
 
-        btn.classList.remove('bg-blue-700');
-        btn.classList.add('bg-green-700');
+        setSelectedContacts(prevSelectedContacts => {
+            if (prevSelectedContacts.includes(contact)) {
+                btn.classList.remove('bg-green-700')
+                btn.classList.add('bg-blue-700')
+                return prevSelectedContacts.filter(prevContact => prevContact !== contact);
+            } else {
+                btn.classList.remove('bg-blue-700');
+                btn.classList.add('bg-green-700');
+
+                return [...prevSelectedContacts, contact]
+            }
+        });
     };
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        createConversation(selectedContacts);
+    }
+
+    console.log(conversations)
 
     return (
         <div
@@ -47,13 +66,13 @@ export default function ConversationsModal({ closeModal }) {
                         <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
                             New Conversation
                         </h3>
-                        <form className="space-y-6" action="#">
+                        <form onSubmit={handleSubmit} className="space-y-6" action="#">
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Users
                                 </label>
                                 {contacts.map(contact => (
-                                    <button type="button" key={contact} onClick={handleSelectedContact} className='bg-blue-700 text-white font-medium text-center p-1 rounded-md mr-2 cursor-pointer'>+{contact}</button>
+                                    <button type="button" key={contact} onClick={e => handleSelectedContact(e, contact)} className='bg-blue-700 text-white font-medium text-center p-1 rounded-md mr-2 cursor-pointer'>+{contact}</button>
                                 ))}
 
                             </div>

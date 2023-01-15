@@ -3,9 +3,13 @@ const express= require('express');
 const router = express.Router();
 
 const handleNewConversation = async(req, res) => {
-    const username = req.body.username;
-    const foundUser = await User.findOne({ username: username }).exec();
+    const refreshToken = req.body.refreshToken;
     const newConversation = req.body.conversation;
+    if (!refreshToken) return res.sendStatus(401);
+
+    const foundUser = await User.findOne({ refreshToken: refreshToken }).exec();
+    if (!foundUser) return res.sendStatus(403) //Forbiden
+
     
     foundUser.conversations = [...foundUser.conversations, newConversation];
     foundUser.save()

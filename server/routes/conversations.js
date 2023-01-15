@@ -2,10 +2,11 @@ const router = require('express').Router();
 const User = require('../model/User');
 
 const getConversations = async(req, res) => {
-    const username = req.body.username;
-    const foundUser = await User.findOne({ username: username }).exec();
+    const refreshToken = req.body.refreshToken
+    if (!refreshToken) return res.sendStatus(401);
 
-    if (!foundUser) return res.sendStatus(400);
+    const foundUser = await User.findOne({ refreshToken: refreshToken }).exec();
+    if (!foundUser) return res.sendStatus(403) //Forbiden
 
     res.json(foundUser.conversations);
 }

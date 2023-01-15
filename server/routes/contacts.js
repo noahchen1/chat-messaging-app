@@ -16,8 +16,6 @@ const getContacts = async (req, res) => {
             res.json(usernameArr)
         })
         .catch(err => res.status(400).json('Error' + err));
-
-    // res.json(foundUser.contacts);
 }
 
 router.post('/', getContacts);

@@ -5,6 +5,7 @@ import App from './App';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from './context/AuthProvider';
 import { ContactsProvider } from './context/ContactsProvider';
+import { ConversationsProvider } from './context/ConversationsProvider';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,9 +14,11 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <ContactsProvider>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
+          <ConversationsProvider>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </ConversationsProvider>
         </ContactsProvider>
       </AuthProvider>
     </BrowserRouter>
