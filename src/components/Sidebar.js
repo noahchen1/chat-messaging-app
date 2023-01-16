@@ -3,14 +3,11 @@ import ConversationsModal from './ConversationsModal';
 import Conversations from './Conversations';
 
 export default function Sidebar() {
-    const [toggle, setToggle] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-    
-    const showContacts = () => setToggle(false);
-    const showConversationsModal = () => setToggle(true);
+
+    const showConversationsModal = () => setModalOpen(true);
     const closeModal = () => setModalOpen(false);
 
-    console.log(toggle)
     return (
         <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
             <div className="header p-4 flex flex-row justify-between items-center flex-none">
@@ -29,7 +26,7 @@ export default function Sidebar() {
                 </button>
             </div>
             <Conversations />
-            {toggle ? <ConversationsModal closeModal={closeModal}/> : null}
+            {modalOpen ? <ConversationsModal closeModal={closeModal}/> : null}
 
         </section>
     )

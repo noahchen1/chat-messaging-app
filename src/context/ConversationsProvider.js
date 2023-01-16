@@ -12,6 +12,7 @@ export function ConversationsProvider({ children }) {
     const CONVERSATIONS_URL = 'http://localhost:4000/conversations';
     const UPDATE_URL = 'http://localhost:4000/new-conversation';
     const [conversations, setConversations] = useState([]);
+    const [selectedConversationIdx, setSelectedConversationIdx] = useState(0);
     const { auth } = useAuth();
     const refreshToken = auth.refreshToken;
 
@@ -24,11 +25,30 @@ export function ConversationsProvider({ children }) {
     const createConversation = recipients => {
         const requestBody = {
             refreshToken: refreshToken,
-            conversation: JSON.stringify({ recipients: recipients, messages: [] })
+            conversation: { recipients: recipients, messages: [] }
         }
 
         axios.post(UPDATE_URL, requestBody)
             .then(res => setConversations(res.data))
+    };
+
+    const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
+        setConversations(prevConversations => {
+            const newMessage = { sender, text };
+            const newConversations = prevConversations.map(conversation => {
+                if (arrayEquality(conversation.recipients, recipients)) {
+                    return {
+                        ...conversation,
+                        messages: [...conversation.messages, newMessage]
+                    }
+                }
+            });
+            return newConversations;
+        });
+    }, [setConversations]);
+
+    const sendMessage = (recipients, text) => {
+        addMessageToConversation({ recipients, text, sender: auth.username })
     };
 
     useEffect(() => {
@@ -36,8 +56,19 @@ export function ConversationsProvider({ children }) {
     }, [getConversations])
 
     return (
-        <ConversationsContext.Provider value={{ conversations, createConversation }}>
+        <ConversationsContext.Provider value={{ conversations, createConversation, selectedConversationIdx, setSelectedConversationIdx, sendMessage }}>
             {children}
         </ConversationsContext.Provider>
     )
+}
+
+function arrayEquality(a, b) {
+    if (a.length !== b.length) return false
+
+    a.sort()
+    b.sort()
+
+    return a.every((element, index) => {
+        return element === b[index]
+    })
 }

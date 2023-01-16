@@ -12,8 +12,8 @@ export default function ConversationsModal({ closeModal }) {
 
         setSelectedContacts(prevSelectedContacts => {
             if (prevSelectedContacts.includes(contact)) {
-                btn.classList.remove('bg-green-700')
-                btn.classList.add('bg-blue-700')
+                btn.classList.remove('bg-green-700');
+                btn.classList.add('bg-blue-700');
                 return prevSelectedContacts.filter(prevContact => prevContact !== contact);
             } else {
                 btn.classList.remove('bg-blue-700');
@@ -30,8 +30,6 @@ export default function ConversationsModal({ closeModal }) {
         createConversation(selectedContacts);
     }
 
-    console.log(conversations)
-
     return (
         <div
             id="authentication-modal"
@@ -46,6 +44,7 @@ export default function ConversationsModal({ closeModal }) {
                         type="button"
                         className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                         data-modal-hide="authentication-modal"
+                        onClick={closeModal}
                     >
                         <svg
                             aria-hidden="true"

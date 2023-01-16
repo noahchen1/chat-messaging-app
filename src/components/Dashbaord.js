@@ -1,5 +1,6 @@
 import React from 'react';
 import Sidebar from './Sidebar';
+import OpenConversation from './OpenConversation';
 
 export default function Dashbaord() {
 
@@ -9,7 +10,8 @@ export default function Dashbaord() {
         <div className="flex-1 flex flex-col">
           <main className="flex-grow flex flex-row min-h-0">
             <Sidebar />
-            <section className="flex flex-col flex-auto border-l border-gray-800">
+            <OpenConversation />
+            {/* <section className="flex flex-col flex-auto border-l border-gray-800">
               <div className="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                 <div className="flex">
                   <div className="w-12 h-12 mr-4 relative flex flex-shrink-0">
@@ -70,7 +72,7 @@ export default function Dashbaord() {
                   </div>
                 </div>
               </div>
-            </section>
+            </section> */}
           </main>
         </div>
       </div>
