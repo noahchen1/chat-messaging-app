@@ -1,12 +1,13 @@
 require('dotenv').config();
+const PORT = process.env.PORT || 4000;
 
 const express = require('express');
 const mongoose = require('mongoose');
+
 const app = express();
 const cors = require('cors');
-const allowedOrigins = require('./config/allowedOrigins')
+const allowedOrigins = require('./config/allowedOrigins');
 
-const PORT = process.env.PORT || 4000;
 const URI = process.env.ATLAS_URI;
 const connectDB = () => {
     const connection = mongoose.connection;
@@ -16,6 +17,7 @@ const connectDB = () => {
     connection.once('open', () => console.log('connection to DB established!'));
     connection.on('error', err => console.log(err));
 }
+
 
 app.use(express.json());
 app.use(cors(allowedOrigins));

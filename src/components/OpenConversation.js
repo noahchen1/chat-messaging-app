@@ -14,8 +14,6 @@ export default function OpenConversation() {
         );
     }
 
-    // console.log(conversations[selectedConversationIdx])
-
     return (
         <section className="flex flex-col flex-auto border-l border-gray-800">
             <div className="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center shadow">

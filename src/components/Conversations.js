@@ -17,6 +17,7 @@ export default function Conversations() {
 
         setSelectedConversationIdx(idx);
     };
+    
 
     return (
         <div className="contacts p-2 flex-1 overflow-y-scroll">
