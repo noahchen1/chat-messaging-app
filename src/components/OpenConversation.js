@@ -47,7 +47,6 @@ export default function OpenConversation() {
                                 <div>{message.text}</div>
                                 <div>You</div>
                             </div>
-
                         )
                     })}
                 </div>

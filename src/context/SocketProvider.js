@@ -24,7 +24,6 @@ export function SocketProvider({ children }) {
 
     }, [id])
 
-    console.log(socket)
     return (
         <SockeContext.Provider value={socket}>
             {children}

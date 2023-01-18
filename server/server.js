@@ -33,3 +33,77 @@ app.use('/conversations', require('./routes/conversations'));
 
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
+
+const User = require('./model/User');
+const io = require('socket.io')(5000, {
+    cors: {
+        origin: ['http://localhost:3000']
+    }
+});
+
+
+
+
+io.on('connection', async socket => {
+    console.log('a user connected')
+
+    const id = socket.handshake.query.id
+    socket.join(id)
+
+    socket.on('send-message', async ({ recipients, text }) => {
+        const foundUser = await User.findOne({ username: id }).exec();
+
+        recipients.map(async recipient => {
+            const foundRecipient = await User.findOne({ username: recipient }).exec();
+
+            const updatedConversations = foundRecipient.conversations.map(conversation => {
+                if (arrayEquality(conversation.recipients, recipients)) {
+                    return {
+                        ...conversation,
+                        messages: [...conversation.messages, { sender: id, text: text }]
+                    }
+
+                }
+                return conversation;
+
+            })
+
+            foundRecipient.conversations = updatedConversations;
+            foundRecipient.save()
+
+            recipients.forEach(recipient => {
+                const newRecipients = recipients.filter(r => r !== recipient);
+
+                newRecipients.push(id)
+                socket.broadcast.to(recipient).emit('receive-message', {
+                    recipients: newRecipients, sender: id, text
+                })
+            })
+                // .then(res => {
+                //     res.json(foundUser.conversations)
+
+                //     recipients.forEach(recipient => {
+                //         const newRecipients = recipients.filter(r => r !== recipient);
+
+                //         newRecipients.push(id)
+                //         socket.broadcast.to(recipient).emit('receive-message', {
+                //             recipients: newRecipients, sender: id, text
+                //         })
+                //     })
+
+                // })
+        })
+    })
+})
+
+function arrayEquality(a, b) {
+    if (a.length !== b.length) return false
+
+    a.sort()
+    b.sort()
+
+    return a.every((element, index) => {
+        return element === b[index]
+    })
+}
+

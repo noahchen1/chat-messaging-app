@@ -35,13 +35,15 @@ export function ConversationsProvider({ children }) {
     };
 
     const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
-        const newMessage = {
-            refreshToken: refreshToken,
-            conversation: { recipients: recipients, message: {sender, text}}
-        };
+        // const newMessage = {
+        //     refreshToken: refreshToken,
+        //     conversation: { recipients: recipients, message: {sender, text}}
+        // };
 
-        axios.post(UPDATE_URL, newMessage)
-            .then(res => setConversations(res.data));
+        // axios.post(UPDATE_URL, newMessage)
+        //     .then(res => setConversations(res.data));
+
+        getConversations()
 
     }, [setConversations]);
 
@@ -56,12 +58,12 @@ export function ConversationsProvider({ children }) {
     }, [getConversations]);
 
     useEffect(() => {
-        if (socket === null) return
-        
-        socket.on('recieve-message', addMessageToConversation);
-
-        return () => socket.off('recieve-message')
-    }, [socket, addMessageToConversation]);
+        if (socket == null) return
+    
+        socket.on('receive-message', addMessageToConversation)
+    
+        return () => socket.off('receive-message')
+      }, [socket, addMessageToConversation]);
 
     return (
         <ConversationsContext.Provider value={{ conversations, createConversation, selectedConversationIdx, setSelectedConversationIdx, sendMessage }}>

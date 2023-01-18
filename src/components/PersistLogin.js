@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 export default function PersistLogin() {
     const REFRESH_URL = 'http://localhost:4000/refresh';
     const [isLoading, setIsLoading] = useState(true);
-    const { auth, setAuth} = useAuth();
+    const { auth, setAuth } = useAuth();
 
     useEffect(() => {
         let isMounted = true;

@@ -2,7 +2,7 @@ const router = require('express').Router();
 const User = require('../model/User');
 
 const getContacts = async (req, res) => {
-    const refreshToken = req.body.refreshToken
+    const refreshToken = req.body.refreshToken;
     if (!refreshToken) return res.sendStatus(401);
 
     const foundUser = await User.findOne({ refreshToken: refreshToken }).exec();
