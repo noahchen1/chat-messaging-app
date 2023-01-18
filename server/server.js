@@ -42,8 +42,6 @@ const io = require('socket.io')(5000, {
 });
 
 
-
-
 io.on('connection', async socket => {
     console.log('a user connected')
 
@@ -51,7 +49,7 @@ io.on('connection', async socket => {
     socket.join(id)
 
     socket.on('send-message', async ({ recipients, text }) => {
-        const foundUser = await User.findOne({ username: id }).exec();
+        // const foundUser = await User.findOne({ username: id }).exec();
 
         recipients.map(async recipient => {
             const foundRecipient = await User.findOne({ username: recipient }).exec();
@@ -71,14 +69,13 @@ io.on('connection', async socket => {
             foundRecipient.conversations = updatedConversations;
             foundRecipient.save()
 
-            recipients.forEach(recipient => {
-                const newRecipients = recipients.filter(r => r !== recipient);
-
-                newRecipients.push(id)
-                socket.broadcast.to(recipient).emit('receive-message', {
-                    recipients: newRecipients, sender: id, text
-                })
-            })
+            // recipients.forEach(recipient => {
+            //     const newRecipients = recipients.filter(r => r !== recipient);
+            //     newRecipients.push(id)
+            //     socket.broadcast.to(recipient).emit('receive-message', {
+            //         recipients: recipients, sender: id, text
+            //     })
+            // })
                 // .then(res => {
                 //     res.json(foundUser.conversations)
 
@@ -92,6 +89,10 @@ io.on('connection', async socket => {
                 //     })
 
                 // })
+        })
+
+        socket.broadcast.emit('receive-message', {
+            recipients: recipients, sender: id, text
         })
     })
 })

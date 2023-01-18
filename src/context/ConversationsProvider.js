@@ -35,16 +35,20 @@ export function ConversationsProvider({ children }) {
     };
 
     const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
-        // const newMessage = {
-        //     refreshToken: refreshToken,
-        //     conversation: { recipients: recipients, message: {sender, text}}
-        // };
+        setConversations(prevConversation => {
+            const newMessage = { sender, text }
+            const newConversations = prevConversation.map(conversation => {
+                if (arrayEquality(conversation.recipients, recipients)) {
+                    return {
+                        ...conversation,
+                        messages: [...conversation.messages, newMessage]
+                    }
+                }
+                return conversation;
+            });
 
-        // axios.post(UPDATE_URL, newMessage)
-        //     .then(res => setConversations(res.data));
-
-        getConversations()
-
+            return newConversations;
+        });
     }, [setConversations]);
 
     const sendMessage = (recipients, text) => {
@@ -59,16 +63,27 @@ export function ConversationsProvider({ children }) {
 
     useEffect(() => {
         if (socket == null) return
-    
+
         socket.on('receive-message', addMessageToConversation)
-    
+
         return () => socket.off('receive-message')
-      }, [socket, addMessageToConversation]);
+    }, [socket, addMessageToConversation]);
 
     return (
         <ConversationsContext.Provider value={{ conversations, createConversation, selectedConversationIdx, setSelectedConversationIdx, sendMessage }}>
             {children}
         </ConversationsContext.Provider>
     )
+}
+
+function arrayEquality(a, b) {
+    if (a.length !== b.length) return false
+
+    a.sort()
+    b.sort()
+
+    return a.every((element, index) => {
+        return element === b[index]
+    })
 }
 

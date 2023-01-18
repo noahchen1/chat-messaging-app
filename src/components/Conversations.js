@@ -18,10 +18,9 @@ export default function Conversations() {
         setSelectedConversationIdx(idx);
     };
     
-    console.log(conversations)
     return (
         <div className="contacts p-2 flex-1 overflow-y-scroll">
-            {conversations.map((conversation, idx) => (
+            {conversations?.map((conversation, idx) => (
                 <div key={idx} onClick={e => handleClick(idx)} className="flex justify-between items-center p-3 hover:bg-gray-200 rounded-lg relative conversations">
                     <div className="w-16 h-16 relative flex flex-shrink-0">
                         <img
