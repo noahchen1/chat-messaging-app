@@ -1,5 +1,5 @@
 require('dotenv').config();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 1000;
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -35,7 +35,7 @@ app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 
 const User = require('./model/User');
-const io = require('socket.io')(5000, {
+const io = require('socket.io')(2000, {
     cors: {
         origin: ['http://localhost:3000']
     }
@@ -49,11 +49,9 @@ io.on('connection', async socket => {
     socket.join(id)
 
     socket.on('send-message', async ({ recipients, text }) => {
-        // const foundUser = await User.findOne({ username: id }).exec();
 
         recipients.map(async recipient => {
             const foundRecipient = await User.findOne({ username: recipient }).exec();
-
             const updatedConversations = foundRecipient.conversations.map(conversation => {
                 if (arrayEquality(conversation.recipients, recipients)) {
                     return {
@@ -67,34 +65,19 @@ io.on('connection', async socket => {
             })
 
             foundRecipient.conversations = updatedConversations;
-            foundRecipient.save()
-
-            // recipients.forEach(recipient => {
-            //     const newRecipients = recipients.filter(r => r !== recipient);
-            //     newRecipients.push(id)
-            //     socket.broadcast.to(recipient).emit('receive-message', {
-            //         recipients: recipients, sender: id, text
-            //     })
-            // })
-                // .then(res => {
-                //     res.json(foundUser.conversations)
-
-                //     recipients.forEach(recipient => {
-                //         const newRecipients = recipients.filter(r => r !== recipient);
-
-                //         newRecipients.push(id)
-                //         socket.broadcast.to(recipient).emit('receive-message', {
-                //             recipients: newRecipients, sender: id, text
-                //         })
-                //     })
-
-                // })
+            foundRecipient.save();
         })
 
         socket.broadcast.emit('receive-message', {
             recipients: recipients, sender: id, text
         })
     })
+
+    socket.on('create-conversation', () => {
+        console.log('new conversation created!')
+
+        socket.broadcast.emit('recieve-new-conversation');
+    });
 })
 
 function arrayEquality(a, b) {

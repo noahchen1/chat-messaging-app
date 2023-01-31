@@ -10,8 +10,8 @@ export function useConversations() {
 }
 
 export function ConversationsProvider({ children }) {
-    const CONVERSATIONS_URL = 'http://localhost:4000/conversations';
-    const UPDATE_URL = 'http://localhost:4000/new-conversation';
+    const CONVERSATIONS_URL = 'http://localhost:1000/conversations';
+    const UPDATE_URL = 'http://localhost:1000/new-conversation';
     const [conversations, setConversations] = useState([]);
     const [selectedConversationIdx, setSelectedConversationIdx] = useState(0);
     const { auth } = useAuth();
@@ -19,9 +19,19 @@ export function ConversationsProvider({ children }) {
     const refreshToken = auth.refreshToken;
 
     const getConversations = useCallback(() => {
-        axios.post(CONVERSATIONS_URL, { refreshToken: refreshToken }).then(res => {
-            setConversations(res.data);
-        });
+        setConversations(prevConversations => {
+            if (auth.length) {
+                axios.post(CONVERSATIONS_URL, { refreshToken: refreshToken }).then(res => {
+                    return res.data;
+                });
+            } else {
+                return prevConversations;
+            }
+        })
+
+        // axios.post(CONVERSATIONS_URL, { refreshToken: refreshToken }).then(res => {
+        //     setConversations(res.data);
+        // });
     }, [setConversations]);
 
     const createConversation = recipients => {
@@ -31,14 +41,19 @@ export function ConversationsProvider({ children }) {
         }
 
         axios.post(UPDATE_URL, requestBody)
-            .then(res => setConversations(res.data));
+            .then(res => {
+                socket.emit('create-conversation')
+                setConversations(res.data);
+            });
     };
 
     const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
-        setConversations(prevConversation => {
+        setConversations(prevConversations => {
+            // let madeChange = false;
             const newMessage = { sender, text }
-            const newConversations = prevConversation.map(conversation => {
+            const newConversations = prevConversations.map(conversation => {
                 if (arrayEquality(conversation.recipients, recipients)) {
+                    // madeChange = true;
                     return {
                         ...conversation,
                         messages: [...conversation.messages, newMessage]
@@ -48,26 +63,56 @@ export function ConversationsProvider({ children }) {
             });
 
             return newConversations;
+
+            // if (madeChange) {
+            //     return newConversations;
+            // } else {
+            //     return [
+            //         ...prevConversations,
+            //         { recipients, messages: [newMessage] }
+            //     ]
+            // }
         });
     }, [setConversations]);
 
     const sendMessage = (recipients, text) => {
         socket.emit('send-message', { recipients, text });
 
-        addMessageToConversation({ recipients, text, sender: auth.username })
+        addMessageToConversation({ recipients, text, sender: auth.username });
     };
 
+    // useEffect(() => {
+    //     getConversations();
+    // }, [getConversations]);
+
     useEffect(() => {
-        getConversations();
-    }, [getConversations]);
+        if (auth.refreshToken) {
+            axios.post(CONVERSATIONS_URL, { refreshToken: refreshToken }).then(res => {
+                setConversations(res.data);
+            })
+        }
+    }, [auth]);
 
     useEffect(() => {
         if (socket == null) return
 
-        socket.on('receive-message', addMessageToConversation)
+        socket.on('receive-message', addMessageToConversation);
 
         return () => socket.off('receive-message')
     }, [socket, addMessageToConversation]);
+
+    useEffect(() => {
+        if (socket == null) return
+
+        socket.on('recieve-new-conversation', () => {
+            console.log('someone else opened a new conversation!')
+            axios.post(CONVERSATIONS_URL, { refreshToken: refreshToken }).then(res => {
+                setConversations(res.data);
+            });
+        });
+
+        return () => socket.off('recieve-new-conversation');
+    }, [socket, createConversation])
 
     return (
         <ConversationsContext.Provider value={{ conversations, createConversation, selectedConversationIdx, setSelectedConversationIdx, sendMessage }}>

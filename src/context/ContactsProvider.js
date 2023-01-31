@@ -9,20 +9,30 @@ export function useContacts() {
 }
 
 export function ContactsProvider({ children }) {
-    const CONTACTS_URL = 'http://localhost:4000/contacts';
+    const CONTACTS_URL = 'http://localhost:1000/contacts';
     const [contacts, setContacts] = useState([]);
     const { auth } = useAuth();
     const refreshToken = { refreshToken: auth.refreshToken};
 
-    const getContacts = useCallback(() => {
-        axios.post(CONTACTS_URL, refreshToken).then(res => {
-            setContacts(res.data)
-        })
-    }, [setContacts]);
+    // const getContacts = useCallback(() => {
+    //     setContacts(prevContacts => {
+    //         if (auth.length) {
+    //             axios.post(CONTACTS_URL, refreshToken).then(res => {
+    //                 return res.data
+    //             });
+    //         } else {
+    //             return prevContacts;
+    //         }
+    //     });
+    // }, [setContacts]);
 
     useEffect(() => {
-        getContacts()
-    }, [getContacts]);
+        if (auth.refreshToken) {
+            axios.post(CONTACTS_URL, refreshToken).then(res => {
+                setContacts(res.data)
+            });
+        }
+    }, [auth]);
 
     return (
         <ContactsContext.Provider value={{ contacts }}>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useConversations } from '../context/ConversationsProvider';
 import { useAuth } from '../context/AuthProvider';
 
@@ -15,7 +15,7 @@ export default function OpenConversation() {
             text
         );
     }
-
+    
     return (
         <section className="flex flex-col flex-auto border-l border-gray-800">
             <div className="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center shadow">

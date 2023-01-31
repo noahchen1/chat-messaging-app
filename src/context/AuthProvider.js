@@ -9,7 +9,7 @@ export function useAuth() {
 }
 
 export function useRefreshToken() {
-    const REFRESH_URL = 'http://localhost:4000/refresh';
+    const REFRESH_URL = 'http://localhost:1000/refresh';
     const { auth, setAuth } = useAuth();
     const refreshToken = { refreshToken: auth.refreshToken};
 

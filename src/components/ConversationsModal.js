@@ -28,6 +28,8 @@ export default function ConversationsModal({ closeModal }) {
         e.preventDefault();
 
         createConversation(selectedContacts);
+        
+        closeModal();
     }
 
     return (

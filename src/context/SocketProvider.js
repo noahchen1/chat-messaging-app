@@ -15,7 +15,7 @@ export function SocketProvider({ children }) {
 
     useEffect(() => {
         const newSocket = io(
-            'http://localhost:5000',
+            'http://localhost:2000',
             { query: { id } }
         );
 

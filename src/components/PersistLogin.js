@@ -6,7 +6,19 @@ import { useState, useEffect } from "react";
 export default function PersistLogin() {
     const REFRESH_URL = 'http://localhost:4000/refresh';
     const [isLoading, setIsLoading] = useState(true);
-    const { auth, setAuth } = useAuth();
+    const { auth, setAuth, rememberUser } = useAuth();
+
+    console.log(rememberUser)
+
+    // useEffect(() => {
+    //     if (auth.refreshToken) {
+    //         axios.post(REFRESH_URL, refreshToken).then(res => {
+    //             const newAuth = { ...auth, accessToken: res.data.accessToken };
+
+    //             setAuth(newAuth)
+    //         });
+    //     }
+    // }, [])
 
     useEffect(() => {
         let isMounted = true;
@@ -31,8 +43,6 @@ export default function PersistLogin() {
         };
 
         !auth.accessToken ? verifyRefreshToken() : setIsLoading(false);
-        // verifyRefreshToken();
-        // setIsLoading(false)
         return () => isMounted = false;
     }, [])
 

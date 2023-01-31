@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
 export default function Login() {
-    const URL = 'http://localhost:4000/auth';
+    const URL = 'http://localhost:1000/auth';
     const usernameRef = useRef();
     const navigate = useNavigate();
 
