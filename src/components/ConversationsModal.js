@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useContacts } from '../context/ContactsProvider';
 import { useConversations } from '../context/ConversationsProvider';
+import { useAuth } from '../context/AuthProvider';
 
 export default function ConversationsModal({ closeModal }) {
     const { contacts } = useContacts();
+    const { auth } = useAuth();
     const { conversations, createConversation } = useConversations();
     const [selectedContacts, setSelectedContacts] = useState([]);
+    const filteredContacts = contacts.filter(contact => contact !== auth.username);
 
     const handleSelectedContact = (e, contact) => {
         const btn = e.target;
@@ -72,7 +75,7 @@ export default function ConversationsModal({ closeModal }) {
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Users
                                 </label>
-                                {contacts.map(contact => (
+                                {filteredContacts.map(contact => (
                                     <button type="button" key={contact} onClick={e => handleSelectedContact(e, contact)} className='bg-blue-700 text-white font-medium text-center p-1 rounded-md mr-2 cursor-pointer'>+{contact}</button>
                                 ))}
 

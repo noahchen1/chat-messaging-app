@@ -86,6 +86,7 @@ export default function Login() {
                                         placeholder="Password"
                                         value={pwd}
                                         onChange={(e) => setPwd(e.target.value)}
+                                        autoComplete='off'
                                         required
                                     />
                                 </div>

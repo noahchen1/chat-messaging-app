@@ -15,7 +15,7 @@ export default function OpenConversation() {
             text
         );
     }
-    
+
     return (
         <section className="flex flex-col flex-auto border-l border-gray-800">
             <div className="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
@@ -33,24 +33,57 @@ export default function OpenConversation() {
                     </div>
                 </div>
             </div>
+
             <div className="chat-body p-4 flex-1 overflow-y-scroll">
                 {conversations[selectedConversationIdx]?.messages.map((message, idx) => (
-                    message.sender === auth.username ?
+                    // start
+                    message.sender === auth.username && message.sender !== conversations[selectedConversationIdx]?.messages[idx - 1]?.sender ?
                         <div key={idx} className="flex flex-row justify-end">
-                            <div>{message.text}</div>
-                        </div>
-                        : <div key={idx} className="flex flex-row justify-start">
-                            <div className='w-8 h-8 relative flex flex-shrink-0 mr-4'>
-                                {message.sender}
-                            </div>
-                            <div>
+                            <p className="px-8 py-3 max-w-xs lg:max-w-md rounded-t-full rounded-l-full bg-blue-500 text-gray-200 mb-1 break-words">
                                 {message.text}
-                            </div>
+                            </p>
                         </div>
+                        // end
+                        : message.sender === auth.username && message.sender !== conversations[selectedConversationIdx]?.messages[idx + 1]?.sender ?
+                            <div key={idx} className="flex flex-row justify-end">
+                                <p className="px-8 py-3 rounded-b-full rounded-l-full bg-blue-500 max-w-xs text-gray-200 lg:max-w-md break-words">
+                                    {message.text}
+                                </p>
+                            </div>
+                            // middle
+                            : message.sender === auth.username ?
+                                <div key={idx} className="flex flex-row justify-end">
+                                    <p className="px-8 py-3  max-w-xs lg:max-w-md rounded-l-full bg-blue-500 text-gray-200 mb-1 break-words">
+                                        {message.text}
+                                    </p>
+                                </div>
+                                // reciver start
+                                : message.sender !== conversations[selectedConversationIdx]?.messages[idx - 1]?.sender ?
+                                    <div key={idx} className="flex flex-row justify-start">
+                                        <p key={idx} className="bg-gray-800 text-gray-200 px-8 py-3 max-w-xs lg:max-w-md rounded-t-full rounded-r-full w-auto lg:ml-10 mb-1 break-words">
+                                            {message.text}
+                                        </p>
+                                    </div>
+
+                                    // reciever middle
+                                    : message.sender === conversations[selectedConversationIdx]?.messages[idx + 1]?.sender ?
+                                        <div key={idx} className="flex flex-row justify-start">
+                                            <p key={idx} className="px-8 py-3 rounded-r-full bg-gray-800 max-w-xs lg:max-w-md text-gray-200 mb-1 lg:ml-10 break-words">
+                                                {message.text}
+                                            </p>
+                                        </div>
+
+                                        // reciever end
+                                        : <div key={idx} className="flex flex-row justify-start">
+                                            <div className='lg:block hidden'>
+                                                {message.sender.split('')[0]}
+                                            </div>
+                                            <p className='px-8 py-3 rounded-b-full rounded-r-full bg-gray-800 max-w-xs lg:max-w-md text-gray-200 lg:ml-9 break-words'>
+                                                {message.text}
+                                            </p>
+                                        </div>
                 ))}
             </div>
-
-
             <form onSubmit={handleSubmit}>
                 <textarea
                     required
