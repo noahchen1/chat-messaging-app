@@ -76,7 +76,7 @@ io.on('connection', async socket => {
     socket.on('create-conversation', () => {
         console.log('new conversation created!')
 
-        socket.broadcast.emit('recieve-new-conversation');
+        socket.emit('recieve-new-conversation');
     });
 })
 

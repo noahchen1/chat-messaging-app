@@ -6,8 +6,8 @@ import { useAuth } from '../context/AuthProvider';
 export default function ConversationsModal({ closeModal }) {
     const { contacts } = useContacts();
     const { auth } = useAuth();
-    const { conversations, createConversation } = useConversations();
-    const [selectedContacts, setSelectedContacts] = useState([]);
+    const { conversations, setSelectedConversationIdx, createConversation } = useConversations();
+    const [selectedContacts, setSelectedContacts] = useState([auth.username]);
     const filteredContacts = contacts.filter(contact => contact !== auth.username);
 
     const handleSelectedContact = (e, contact) => {
@@ -30,9 +30,33 @@ export default function ConversationsModal({ closeModal }) {
     const handleSubmit = e => {
         e.preventDefault();
 
+        if (!conversations.length) {
+            createConversation(selectedContacts);
+            closeModal();
+            return;
+        }
+
+        for (let i = 0; i < conversations.length; i++) {
+            if (arrayEquality(conversations[i].recipients, selectedContacts)) {
+                setSelectedConversationIdx(i);
+                closeModal();
+                return;
+            }
+        }
+
         createConversation(selectedContacts);
-        
         closeModal();
+    }
+
+    function arrayEquality(a, b) {
+        if (a.length !== b.length) return false
+
+        a.sort()
+        b.sort()
+
+        return a.every((element, index) => {
+            return element === b[index]
+        })
     }
 
     return (
