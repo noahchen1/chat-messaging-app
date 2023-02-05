@@ -3,7 +3,6 @@ import { useConversations } from '../context/ConversationsProvider';
 
 export default function Conversations() {
     const { conversations, setSelectedConversationIdx } = useConversations();
-    
     const handleClick = (idx) => {
         const conversations = document.querySelectorAll('.conversations');
 
@@ -17,27 +16,22 @@ export default function Conversations() {
 
         setSelectedConversationIdx(idx);
     };
-    
+
     return (
-        <div className="contacts p-2 flex-1 overflow-y-scroll">
+        <div className="px-4 flex-1">
             {conversations?.map((conversation, idx) => (
-                <div key={idx} onClick={e => handleClick(idx)} className="flex justify-between items-center p-3 hover:bg-gray-200 rounded-lg relative conversations">
-                    <div className="w-16 h-16 relative flex flex-shrink-0">
-                        <img
-                            className="shadow-md rounded-full w-full h-full object-cover"
-                            src="https://randomuser.me/api/portraits/women/61.jpg"
-                            alt=""
-                        />
+                <div key={idx} onClick={() => handleClick(idx)} className="flex justify-between items-center p-3 hover:bg-gray-200 rounded-lg relative">
+                    <div className=" relative flex flex-shrink-0 px-3 py-1 bg-gray-200 rounded-full text-lg font-semibold ">
+                        {conversation.messages[conversation.messages.length - 1].sender.split('')[0].toUpperCase()}
                     </div>
-                    <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
-                        <p>{conversation?.recipients.join(', ')}</p>
+                    <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block ">
+                        <p className='font-semibold'>{conversation?.recipients.join(', ')}</p>
                         <div className="flex items-center text-sm text-gray-600">
                             <div className="min-w-0">
                                 <p className="truncate">
-                                    Ok, see you at the subway in a bit.
+                                    {conversation.messages.length ? `${conversation.messages[conversation.messages.length - 1].text}` : null}
                                 </p>
                             </div>
-                            <p className="ml-2 whitespace-no-wrap">Just now</p>
                         </div>
                     </div>
                 </div>

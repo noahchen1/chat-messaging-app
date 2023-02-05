@@ -64,9 +64,9 @@ export default function ConversationsModal({ closeModal }) {
             id="authentication-modal"
             tabIndex={-1}
             aria-hidden="true"
-            className="absolute top-0 left-0 right-0 z-50 w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full bg-black bg-opacity-50 flex justify-center items-center"
+            className="absolute top-0 left-0 right-0 z-50 w-full overflow-x-hidden overflow-y-auto inset-0 h-modal h-full bg-black bg-opacity-50 flex justify-center items-center"
         >
-            <div className="relative w-full h-full max-w-md md:h-auto">
+            <div className="relative w-full h-full max-w-md h-auto mx-2">
                 {/* Modal content */}
                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <button
@@ -90,7 +90,7 @@ export default function ConversationsModal({ closeModal }) {
                         </svg>
                         <span className="sr-only">Close modal</span>
                     </button>
-                    <div className="px-6 py-6 lg:px-8">
+                    <div className="px-6 pt-6 pb-14 lg:px-8">
                         <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
                             New Conversation
                         </h3>

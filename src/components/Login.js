@@ -30,7 +30,7 @@ export default function Login() {
                 setAuth({ username, pwd, accessToken, refreshToken });
                 setUsername('');
                 setPwd('');
-                navigate('/dashboard');
+                navigate('/');
             }).catch(err => {
                 if (!err?.response) {
                     setErrMsg('No Server Response');

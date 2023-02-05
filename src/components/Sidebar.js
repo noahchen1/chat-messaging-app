@@ -11,12 +11,12 @@ export default function Sidebar() {
     return (
         <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
             <div className="header p-4 flex flex-row justify-between items-center flex-none">
-                <p className="text-md font-bold hidden md:block group-hover:block">
+                <p className="text-md font-bold hidden md:block">
                     Messenger
                 </p>
                 <button
                     href="#"
-                    className="block rounded-full hover:bg-gray-200 bg-white w-10 h-10 p-2 hidden md:block group-hover:block"
+                    className="block rounded-full hover:bg-gray-200 bg-white w-10 h-10 p-2 ml-3"
                     type="button"
                     onClick={showConversationsModal}
                 >

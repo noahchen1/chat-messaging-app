@@ -24,8 +24,8 @@ function App() {
       <Route path="/register" element={<Register />} />
 
       <Route path="/" element={<PersistLogin />}>
-        <Route path="/" element={<CheckAuth />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="" element={<CheckAuth />}>
+          <Route path="" element={<Dashboard />} />
         </Route>
       </Route>
     </Routes>

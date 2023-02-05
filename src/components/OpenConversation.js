@@ -9,10 +9,9 @@ export default function OpenConversation() {
 
     const setRef = useCallback(node => {
         if (node) {
-            node.scrollIntoView({ smooth: true })
+            node.scrollIntoView({ smooth: true });
         }
     }, []);
-
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -25,21 +24,14 @@ export default function OpenConversation() {
         setText('');
     }
 
-
     return (
         <section className="flex flex-col flex-auto border-l border-gray-800">
             <div className="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
                 <div className="flex">
-                    <div className="w-12 h-12 mr-4 relative flex flex-shrink-0">
-                        <img
-                            className="shadow-md rounded-full w-full h-full object-cover"
-                            src="https://randomuser.me/api/portraits/women/33.jpg"
-                            alt=""
-                        />
-                    </div>
                     <div className="text-sm">
-                        <p className="font-bold">Scarlett Johansson</p>
-                        <p>Active 1h ago</p>
+                        {conversations[selectedConversationIdx]?.recipients.map((recipient, idx) => (
+                            recipient !== auth.username ? <p key={idx} className="font-bold">{recipient}</p> : null
+                        ))}
                     </div>
                 </div>
             </div>
@@ -76,8 +68,11 @@ export default function OpenConversation() {
                                     </div>
                                     // reciver start
                                     : message.sender !== conversations[selectedConversationIdx]?.messages[idx - 1]?.sender ?
-                                        <div key={idx} className="flex flex-row justify-start">
-                                            <p key={idx} className="bg-gray-800 text-gray-200 px-8 py-3 max-w-xs lg:max-w-md rounded-t-full rounded-r-full w-auto lg:ml-14 mb-1 break-words">
+                                        <div key={idx} className="flex flex-row justify-start items-center">
+                                            <div className='lg:block hidden border px-3 py-1 bg-gray-200 rounded-full text-lg font-semibold'>
+                                                {message.sender.split('')[0].toUpperCase()}
+                                            </div>
+                                            <p key={idx} className="bg-gray-800 text-gray-200 px-8 py-3 max-w-xs lg:max-w-md rounded-t-full rounded-r-full w-auto lg:ml-5 mb-1 break-words">
                                                 {message.text}
                                             </p>
                                         </div>
@@ -96,10 +91,7 @@ export default function OpenConversation() {
                                                 key={idx}
                                                 className="flex flex-row justify-start items-center mb-1"
                                             >
-                                                <div className='lg:block hidden border px-3 py-1 bg-gray-200 rounded-full text-lg font-semibold'>
-                                                    {message.sender.split('')[0].toUpperCase()}
-                                                </div>
-                                                <p className='px-8 py-3 rounded-b-full rounded-r-full bg-gray-800 max-w-xs lg:max-w-md text-gray-200 lg:ml-5 break-words'>
+                                                <p className='px-8 py-3 rounded-b-full rounded-r-full bg-gray-800 max-w-xs lg:max-w-md text-gray-200 lg:ml-14 break-words'>
                                                     {message.text}
                                                 </p>
                                             </div>
@@ -123,14 +115,6 @@ export default function OpenConversation() {
                     </button>
 
                 </div>
-
-                {/* <textarea
-                    required
-                    value={text}
-                    onChange={e => setText(e.target.value)}
-                    style={{ height: '75px', resize: 'none' }}
-                    className='border-2'
-                /> */}
             </form>
         </section>
     )

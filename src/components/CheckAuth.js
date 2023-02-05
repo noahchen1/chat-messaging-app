@@ -1,8 +1,8 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
 export default function CheckAuth() {
-    const { auth, rememberUser } = useAuth();
+    const { auth } = useAuth();
     
     return (
         auth?.accessToken
