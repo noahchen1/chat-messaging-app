@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -6,6 +7,7 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const RESITER_URL = 'http://localhost:1000/register';
 
 export default function Register() {
+    const navigate = useNavigate();
     const usernameRef = useRef();
     const errRef = useRef();
 
@@ -35,6 +37,7 @@ export default function Register() {
         axios.post(RESITER_URL, newUser)
             .then(res => {
                 setSuccess(true);
+                navigate('/login')
             }).catch(err => {
                 if (!err?.response) {
                     setErrMsg('No Server Response!');
@@ -43,8 +46,6 @@ export default function Register() {
                 } else {
                     setErrMsg('Registration Failed!');
                 }
-                
-                // errRef.current.focus();
             });
     };
 

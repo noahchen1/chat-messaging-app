@@ -100,7 +100,7 @@ export default function ConversationsModal({ closeModal }) {
                                     Users
                                 </label>
                                 {filteredContacts.map(contact => (
-                                    <button type="button" key={contact} onClick={e => handleSelectedContact(e, contact)} className='bg-blue-700 text-white font-medium text-center p-1 rounded-md mr-2 cursor-pointer'>+{contact}</button>
+                                    <button type="button" key={contact} onClick={e => handleSelectedContact(e, contact)} className='bg-blue-700 text-white font-medium text-center p-1 rounded-md mr-2 mt-1 cursor-pointer'>+{contact}</button>
                                 ))}
 
                             </div>

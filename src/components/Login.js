@@ -35,9 +35,9 @@ export default function Login() {
                 if (!err?.response) {
                     setErrMsg('No Server Response');
                 } else if (err.response?.status === 400) {
-                    setErrMsg('Missing Username or Password');
+                    setErrMsg('User does not exist');
                 } else if (err.response?.status === 401) {
-                    setErrMsg('Unauthorized');
+                    setErrMsg('Your password may be incorrect');
                 } else {
                     setErrMsg('Login Failed')
                 }
@@ -46,23 +46,28 @@ export default function Login() {
 
     const toggleRememberMe = () => {
         setRememberUser(prev => !prev);
-    }; 
+    };
 
     return (
         <div>
             <section className="h-screen">
                 <div className="px-6 h-full text-gray-800">
                     <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-                        <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
+                        <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 lg:mb-12">
                             <img
-                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                                src={require('../images/image.png')}
                                 className="w-full"
                                 alt="Sample image"
                             />
                         </div>
-                        <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+                        <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 lg:mb-12 mb-32 md:mb-0">
                             <form onSubmit={handleSumit}>
                                 {/*Username input */}
+                                {errMsg ?
+                                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-1 mb-1 rounded relative" role="alert">
+                                        <strong class="font-bold">{errMsg}</strong>
+                                    </div> : null
+                                }
                                 <div className="mb-6">
                                     <input
                                         type="text"
@@ -71,7 +76,10 @@ export default function Login() {
                                         autoComplete="off"
                                         placeholder="username"
                                         value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        onChange={e => {
+                                            setUsername(e.target.value)
+                                            setErrMsg('')
+                                        }}
                                         ref={usernameRef}
                                         required
                                     />
@@ -85,7 +93,10 @@ export default function Login() {
                                         id="password"
                                         placeholder="Password"
                                         value={pwd}
-                                        onChange={(e) => setPwd(e.target.value)}
+                                        onChange={e => {
+                                            setPwd(e.target.value)
+                                            setErrMsg('')
+                                        }}
                                         autoComplete='off'
                                         required
                                     />
@@ -107,9 +118,7 @@ export default function Login() {
                                             Remember me
                                         </label>
                                     </div>
-                                    <a href="#!" className="text-gray-800">
-                                        Forgot password?
-                                    </a>
+
                                 </div>
 
                                 <div className="text-center lg:text-left">
@@ -123,7 +132,7 @@ export default function Login() {
                                         Don't have an account?
                                         <a
                                             href="/register"
-                                            className="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+                                            className="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out ml-1"
                                         >
                                             Register
                                         </a>
