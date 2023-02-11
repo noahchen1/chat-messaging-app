@@ -33,47 +33,47 @@ app.use("/conversations", require("./routes/conversations"));
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 const User = require("./model/User");
-const io = require("socket.io")(2000, {
-  cors: {
-    origin: ["http://localhost:3000"],
-  },
-});
+// const io = require("socket.io")(2000, {
+//   cors: {
+//     origin: ["http://localhost:3000"],
+//   },
+// });
 
-io.on("connection", async socket => {
-  const id = socket.handshake.query.id;
-  socket.join(id);
+// io.on("connection", async socket => {
+//   const id = socket.handshake.query.id;
+//   socket.join(id);
 
-  socket.on("send-message", async ({ recipients, text }) => {
-    recipients.map(async recipient => {
-      const foundRecipient = await User.findOne({ username: recipient }).exec();
-      const updatedConversations = foundRecipient.conversations.map(
-        conversation => {
-          if (arrayEquality(conversation.recipients, recipients)) {
-            return {
-              ...conversation,
-              messages: [...conversation.messages, { sender: id, text: text }],
-            };
-          }
-          return conversation;
-        }
-      );
+//   socket.on("send-message", async ({ recipients, text }) => {
+//     recipients.map(async recipient => {
+//       const foundRecipient = await User.findOne({ username: recipient }).exec();
+//       const updatedConversations = foundRecipient.conversations.map(
+//         conversation => {
+//           if (arrayEquality(conversation.recipients, recipients)) {
+//             return {
+//               ...conversation,
+//               messages: [...conversation.messages, { sender: id, text: text }],
+//             };
+//           }
+//           return conversation;
+//         }
+//       );
 
-      foundRecipient.conversations = updatedConversations;
-      foundRecipient.save();
-    });
+//       foundRecipient.conversations = updatedConversations;
+//       foundRecipient.save();
+//     });
 
-    socket.broadcast.emit("receive-message", {
-      recipients: recipients,
-      sender: id,
-      text,
-    });
-  });
+//     socket.broadcast.emit("receive-message", {
+//       recipients: recipients,
+//       sender: id,
+//       text,
+//     });
+//   });
 
-  socket.on("create-conversation", () => {
-    socket.emit("recieve-new-conversation");
-    socket.broadcast.emit("recieve-new-conversation");
-  });
-});
+//   socket.on("create-conversation", () => {
+//     socket.emit("recieve-new-conversation");
+//     socket.broadcast.emit("recieve-new-conversation");
+//   });
+// });
 
 function arrayEquality(a, b) {
   if (a.length !== b.length) return false;
