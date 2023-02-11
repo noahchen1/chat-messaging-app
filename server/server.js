@@ -1,11 +1,13 @@
 require("dotenv").config();
-const PORT_1 = process.env.PORT_1 || 1000;
-const PORT_2 = process.env.PORT_2 || 2000;
+const PORT = process.env.PORT || 1000;
+// const PORT_1 = process.env.PORT_1 || 1000;
+// const PORT_2 = process.env.PORT_2 || 2000;
 
 const express = require("express");
 const mongoose = require("mongoose");
 
 const app = express();
+const http = require('http').createServer(app);
 const cors = require("cors");
 const allowedOrigins = require("./config/allowedOrigins");
 
@@ -31,10 +33,10 @@ app.use("/new-conversation", require("./routes/updateConversations"));
 app.use("/contacts", require("./routes/contacts"));
 app.use("/conversations", require("./routes/conversations"));
 
-app.listen(PORT_1, () => console.log(`server is running on port ${PORT_1}`));
+http.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 const User = require("./model/User");
-const io = require("socket.io")(PORT_2, {
+const io = require("socket.io")(http, {
   cors: {
     origin: ["http://localhost:3000"],
   },

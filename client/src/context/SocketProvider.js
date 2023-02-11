@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "./AuthProvider";
-import { socketUrl } from "../urls/serverUrl";
+import { serverUrl } from "../urls/serverUrl";
 
 const SockeContext = createContext();
 
@@ -15,7 +15,7 @@ export function SocketProvider({ children }) {
   const id = auth.username;
 
   useEffect(() => {
-    const newSocket = io(socketUrl, { query: { id } });
+    const newSocket = io(serverUrl, { query: { id } });
 
     setSocket(newSocket);
     return () => newSocket.close();
