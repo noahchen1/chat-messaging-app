@@ -30,10 +30,6 @@ app.use("/new-conversation", require("./routes/updateConversations"));
 app.use("/contacts", require("./routes/contacts"));
 app.use("/conversations", require("./routes/conversations"));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
-});
-
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 const User = require("./model/User");
@@ -44,8 +40,6 @@ const io = require("socket.io")(2000, {
 });
 
 io.on("connection", async socket => {
-  console.log("a user connected");
-
   const id = socket.handshake.query.id;
   socket.join(id);
 
