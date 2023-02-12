@@ -86,7 +86,7 @@ export default function OpenConversation() {
                   key={idx}
                   className="flex flex-row justify-start items-center"
                 >
-                  <div className="lg:block hidden border px-3 py-1 bg-gray-200 rounded-full text-lg font-semibold">
+                  <div className="text-center lg:block hidden border w-8 h-8 bg-gray-200 rounded-full text-lg font-semibold">
                     {message.sender.split("")[0].toUpperCase()}
                   </div>
                   <p

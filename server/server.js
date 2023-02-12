@@ -1,8 +1,5 @@
 require("dotenv").config();
 const PORT = process.env.PORT || 1000;
-// const PORT_1 = process.env.PORT_1 || 1000;
-// const PORT_2 = process.env.PORT_2 || 2000;
-
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -38,7 +35,10 @@ http.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 const User = require("./model/User");
 const io = require("socket.io")(http, {
   cors: {
-    origin: ["https://chat-app-zs9s.onrender.com"],
+    origin: [
+      "https://chat-app-zs9s.onrender.com",
+      "http://localhost:3000"
+    ],
   },
 });
 
