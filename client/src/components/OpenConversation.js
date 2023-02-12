@@ -91,7 +91,7 @@ export default function OpenConversation() {
                   </div>
                   <p
                     key={idx}
-                    className="bg-gray-800 text-gray-200 px-8 py-3 max-w-xs lg:max-w-md rounded-t-full rounded-r-full w-auto lg:ml-5 mb-1 break-words"
+                    className="bg-gray-800 text-gray-200 px-8 py-3 max-w-xs lg:max-w-md rounded-t-full rounded-r-full w-auto lg:ml-6 mb-1 break-words"
                   >
                     {message.text}
                   </p>
