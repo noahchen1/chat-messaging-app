@@ -38,7 +38,7 @@ http.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 const User = require("./model/User");
 const io = require("socket.io")(http, {
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: ["https://chat-app-zs9s.onrender.com"],
   },
 });
 

@@ -1,5 +1,6 @@
 const allowedOrigins = [
     'http://localhost:3000',
+    'https://chat-app-zs9s.onrender.com'
 ];
 
 const corsOptions = {
