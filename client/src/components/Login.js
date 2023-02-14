@@ -2,8 +2,10 @@ import React from "react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import { useConversations } from "../context/ConversationsProvider";
 import { serverUrl } from "../urls/serverUrl";
 import axios from "axios";
+import LoadingScreen from "./LoadingScreen";
 
 export default function Login() {
   const URL = `${serverUrl}/auth`;
@@ -14,6 +16,7 @@ export default function Login() {
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const { setAuth, rememberUser, setRememberUser } = useAuth();
+  const { isLoading, setIsLoading } = useConversations();
 
   const handleSumit = async e => {
     e.preventDefault();
@@ -22,6 +25,7 @@ export default function Login() {
       username: username,
       password: pwd,
     };
+    setIsLoading(true);
 
     axios
       .post(URL, userToLogin)
@@ -44,7 +48,8 @@ export default function Login() {
         } else {
           setErrMsg("Login Failed");
         }
-      });
+      }).finally(() => setIsLoading(false))
+      ;
   };
 
   const toggleRememberMe = () => {
@@ -52,7 +57,8 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <div className="relative">
+      {isLoading ? <LoadingScreen /> : null}
       <section className="h-screen">
         <div className="px-6 h-full text-gray-800">
           <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">

@@ -15,16 +15,16 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <SocketProvider>
-          <ContactsProvider>
-            <ConversationsProvider>
+          <ConversationsProvider>
+            <ContactsProvider>
               <Routes>
                 <Route path="/*" element={<App />} />
               </Routes>
-            </ConversationsProvider>
-          </ContactsProvider>
+            </ContactsProvider>
+          </ConversationsProvider>
         </SocketProvider>
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode >
 );
 

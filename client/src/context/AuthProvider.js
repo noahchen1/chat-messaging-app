@@ -8,19 +8,6 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-export function useRefreshToken() {
-  const REFRESH_URL = "http://localhost:1000/refresh";
-  const { auth, setAuth } = useAuth();
-  const refreshToken = { refreshToken: auth.refreshToken };
-
-  useEffect(() => {
-    axios.post(REFRESH_URL, refreshToken).then(res => {
-      const newAuth = { ...auth, accessToken: res.data.accessToken };
-      setAuth(newAuth);
-    });
-  }, [auth]);
-}
-
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useLocalStorage("user", []);
   const [rememberUser, setRememberUser] = useLocalStorage(

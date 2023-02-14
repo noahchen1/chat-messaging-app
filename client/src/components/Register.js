@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../urls/serverUrl";
+import { useConversations } from "../context/ConversationsProvider";
 import axios from "axios";
+import LoadingScreen from "./LoadingScreen";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -11,6 +13,7 @@ export default function Register() {
   const navigate = useNavigate();
   const usernameRef = useRef();
 
+  const { isLoading, setIsLoading } = useConversations();
   const [username, setUsername] = useState("");
   const [validName, setValidName] = useState(false);
 
@@ -21,10 +24,10 @@ export default function Register() {
   const [validMatch, setValidMatch] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   const handleSubmit = e => {
     e.preventDefault();
+    setIsLoading(true);
 
     const newUser = {
       username: username,
@@ -34,7 +37,6 @@ export default function Register() {
     axios
       .post(RESITER_URL, newUser)
       .then(res => {
-        setSuccess(true);
         navigate("/login");
       })
       .catch(err => {
@@ -45,6 +47,9 @@ export default function Register() {
         } else {
           setErrMsg("Registration Failed!");
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -66,7 +71,8 @@ export default function Register() {
   }, [pwd, matchPwd]);
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col">
+    <div className="bg-gray-100 min-h-screen flex flex-col relative">
+      {isLoading ? <LoadingScreen /> : null}
       <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
         <form
           onSubmit={handleSubmit}

@@ -19,6 +19,7 @@ export function useConversations() {
 export function ConversationsProvider({ children }) {
   const CONVERSATIONS_URL = `${serverUrl}/conversations`;
   const UPDATE_URL = `${serverUrl}/new-conversation`;
+  const [isLoading, setIsLoading] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [selectedConversationIdx, setSelectedConversationIdx] = useState(0);
   const { auth } = useAuth();
@@ -65,11 +66,13 @@ export function ConversationsProvider({ children }) {
 
   useEffect(() => {
     if (auth.refreshToken) {
+      setIsLoading(true);
+
       axios
         .post(CONVERSATIONS_URL, { refreshToken: refreshToken })
         .then(res => {
           setConversations(res.data);
-        });
+        }).finally(() => setIsLoading(false));
     }
   }, [auth]);
 
@@ -85,11 +88,13 @@ export function ConversationsProvider({ children }) {
     if (socket == null) return;
 
     socket.on("recieve-new-conversation", () => {
+      setIsLoading(true);
+
       axios
         .post(CONVERSATIONS_URL, { refreshToken: refreshToken })
         .then(res => {
           setConversations(res.data);
-        });
+        }).finally(() => setIsLoading(false));
     });
 
     return () => socket.off("recieve-new-conversation");
@@ -103,6 +108,8 @@ export function ConversationsProvider({ children }) {
         selectedConversationIdx,
         setSelectedConversationIdx,
         sendMessage,
+        isLoading,
+        setIsLoading
       }}
     >
       {children}

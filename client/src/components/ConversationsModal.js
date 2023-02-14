@@ -6,8 +6,7 @@ import { useAuth } from "../context/AuthProvider";
 export default function ConversationsModal({ closeModal }) {
   const { contacts } = useContacts();
   const { auth } = useAuth();
-  const { conversations, setSelectedConversationIdx, createConversation } =
-    useConversations();
+  const { conversations, setSelectedConversationIdx, createConversation } = useConversations();
   const [selectedContacts, setSelectedContacts] = useState([auth.username]);
   const filteredContacts = contacts.filter(
     contact => contact !== auth.username
